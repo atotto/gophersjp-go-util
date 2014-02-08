@@ -6,24 +6,24 @@ import (
 	"os/exec"
 )
 
-type Repo struct {
+type Repos struct {
 	repoRoot string
 }
 
 // AttachRepos is handle of hg command.
 // repoRoot is represent hg repository root.
-func AttachRepos(repoRoot string) (*Repo, error) {
+func AttachRepos(repoRoot string) (*Repos, error) {
 	if _, err := os.Stat(repoRoot); err != nil {
 		return nil, err
 	}
 	if _, err := os.Stat(repoRoot + "/.hg"); err != nil {
 		return nil, err
 	}
-	return &Repo{repoRoot: repoRoot}, nil
+	return &Repos{repoRoot: repoRoot}, nil
 }
 
 // Diff returns a diff if differ between specified file's revision and latest on go tip.
-func (hg *Repo) Diff(filepath, revision string) ([]byte, error) {
+func (hg *Repos) Diff(filepath, revision string) ([]byte, error) {
 	cmd := exec.Command("hg", "diff", filepath, "-r", revision)
 	cmd.Dir = hg.repoRoot
 
@@ -31,7 +31,7 @@ func (hg *Repo) Diff(filepath, revision string) ([]byte, error) {
 }
 
 // UpdateRepo perform the hg pull;hg update tip.
-func (hg *Repo) UpdateRepo() error {
+func (hg *Repos) UpdateRepos() error {
 	if err := hg.pull(); err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (hg *Repo) UpdateRepo() error {
 }
 
 // Pull perform the hg pull.
-func (hg *Repo) pull() error {
+func (hg *Repos) pull() error {
 	cmd := exec.Command("hg", "pull")
 	cmd.Dir = hg.repoRoot
 
@@ -51,7 +51,7 @@ func (hg *Repo) pull() error {
 }
 
 // UpdateTip perform the hg update tip.
-func (hg *Repo) updateTip() error {
+func (hg *Repos) updateTip() error {
 	cmd := exec.Command("hg", "update", "tip")
 	cmd.Dir = hg.repoRoot
 
@@ -60,7 +60,7 @@ func (hg *Repo) updateTip() error {
 }
 
 // IsLatest returns true if file's revision is latest on go tip
-func (hg *Repo) IsLatest(filepath, revision string) (bool, error) {
+func (hg *Repos) IsLatest(filepath, revision string) (bool, error) {
 	b, err := hg.Diff(filepath, revision)
 	if err != nil {
 		return false, err
