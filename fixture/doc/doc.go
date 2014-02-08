@@ -4,4 +4,3 @@
 
 //	本ドキュメントは以下のドキュメントを翻訳しています: https://code.google.com/p/go/source/browse/misc/goplay/doc.go?r=3633a89bb56d9276a9fe55435b849f931bfa6393
 package main
-

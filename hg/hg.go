@@ -1,4 +1,4 @@
-package gotip
+package hg
 
 import (
 	"os"

@@ -5,7 +5,7 @@ import (
 	"log"
 	"runtime"
 
-	"github.com/atotto/gophersjp-go-util/gotip"
+	"github.com/atotto/gophersjp-go-util/hg"
 	"github.com/atotto/gophersjp-go-util/translated"
 )
 
@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	repos, err := gotip.AttachRepos(runtime.GOROOT())
+	repos, err := hg.AttachRepos(runtime.GOROOT())
 	if err != nil {
 		log.Fatal(err)
 	}
