@@ -48,7 +48,8 @@ func main() {
 			log.Fatal("rev:" + err.Error())
 		}
 		var b []byte
-		if strings.HasPrefix(path, "src/pkg/code.google.com/p/go.tools") {
+		if strings.HasPrefix(path, "src/pkg/code.google.com/p/go.tools/") {
+			path = strings.TrimPrefix(path, "src/pkg/code.google.com/p/go.tools/")
 			b, err = gotoolRepos.Diff(path, rev.String())
 		} else {
 			b, err = goRepos.Diff(path, rev.String())
