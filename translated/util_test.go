@@ -21,8 +21,8 @@ func ExampleGetDocs() {
 	// ../fixture/html/updated.html
 }
 
-func ExampleGetNode() {
-	out, err := GetNode("../fixture/doc/doc.go")
+func ExampleGetRevision() {
+	out, err := GetRevision("../fixture/doc/doc.go")
 	if err != nil {
 		log.Fatal(err)
 	}

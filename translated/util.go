@@ -31,7 +31,7 @@ func GetDocs(root string) ([]string, error) {
 	return list, err
 }
 
-func GetNode(filename string) (string, error) {
+func GetRevision(filename string) (string, error) {
 	pattern := regexp.MustCompilePOSIX(`https://code.google.com/p/go/source/browse/.*$`)
 
 	f, err := os.Open(filename)
