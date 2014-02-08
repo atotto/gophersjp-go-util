@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"runtime"
+	"strings"
 
 	"github.com/atotto/gophersjp-go-util/hg"
 	"github.com/atotto/gophersjp-go-util/translated"
@@ -29,6 +30,12 @@ func main() {
 
 	d := NewData()
 	for _, path := range list {
+		log.Printf("== %s\n", path)
+
+		if strings.HasPrefix(path, "src/pkg/code.google.com") {
+			log.Println("hoge")
+		}
+
 		rev, err := tr.GetRevision(*root + "/" + path)
 		if err != nil {
 			log.Fatal("rev:" + err.Error())
@@ -39,7 +46,7 @@ func main() {
 			revision = rev.String()
 		}
 		if err != nil {
-			log.Printf("path: %s, %s, %s", path, err.Error(), string(b))
+			log.Printf("error: %s, %s", err.Error(), string(b))
 			revision = string(b)
 		}
 

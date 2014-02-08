@@ -7,7 +7,7 @@ import (
 )
 
 func ExampleGetDocs() {
-	list, err := GetDocs("../fixture")
+	list, err := GetDocs("../_fixture")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,7 +22,7 @@ func ExampleGetDocs() {
 }
 
 func ExampleGetRevision() {
-	out, err := GetRevision("../fixture/doc/doc.go")
+	out, err := GetRevision("../_fixture/doc/doc.go")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,7 +35,7 @@ func ExampleGetRevision() {
 }
 
 func ExampleGetURL() {
-	out, err := GetURL("../fixture/doc/doc.go")
+	out, err := GetURL("../_fixture/doc/doc.go")
 	if err != nil {
 		log.Fatal(err)
 	}
