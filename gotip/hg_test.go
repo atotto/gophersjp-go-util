@@ -28,7 +28,7 @@ func TestAttachRepos(t *testing.T) {
 	}
 }
 
-func TestIsLatest(t *testing.T) {
+func TestDiff(t *testing.T) {
 	//$ hg diff src/cmd/5a/doc.go -r 3633a89bb56d
 
 	hg, err := AttachRepos(runtime.GOROOT())
@@ -36,13 +36,12 @@ func TestIsLatest(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected := false
-	actual, err := hg.IsLatest("src/cmd/5a/doc.go", "3633a89bb56d")
+	actual, err := hg.Diff("src/cmd/5a/doc.go", "3633a89bb56d")
 
 	if err != nil {
 		t.Fatal(err)
 	}
-	if actual != expected {
-		t.Fatalf("want %v, got %v", expected, actual)
+	if len(actual) == 0 {
+		t.Fatalf("want differ, got not differ")
 	}
 }

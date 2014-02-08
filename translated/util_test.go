@@ -16,9 +16,9 @@ func ExampleGetDocs() {
 	}
 
 	// Output:
-	// ../fixture/doc/doc.go
-	// ../fixture/html/needupdate.html
-	// ../fixture/html/updated.html
+	// doc/doc.go
+	// html/needupdate.html
+	// html/updated.html
 }
 
 func ExampleGetRevision() {
@@ -26,9 +26,11 @@ func ExampleGetRevision() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(out)
+	fmt.Println(out.URL())
+	fmt.Println(out.String())
 
 	// Output:
+	// https://code.google.com/p/go/source/browse/misc/goplay/doc.go
 	// 3633a89bb56d9276a9fe55435b849f931bfa6393
 }
 

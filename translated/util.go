@@ -11,7 +11,7 @@ import (
 
 // GetDocs return translate documents filepath
 func GetDocs(root string) ([]string, error) {
-	pattern := regexp.MustCompilePOSIX(`\.go|\.html`)
+	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/(.*)(\.go|\.html)`)
 
 	list := []string{}
 
@@ -22,9 +22,9 @@ func GetDocs(root string) ([]string, error) {
 		if info.IsDir() {
 			return nil
 		}
-		result := pattern.MatchString(path)
-		if result {
-			list = append(list, path)
+		result := pattern.FindStringSubmatch(path)
+		if result != nil {
+			list = append(list, result[1]+result[2])
 		}
 		return nil
 	})
@@ -32,9 +32,22 @@ func GetDocs(root string) ([]string, error) {
 	return list, err
 }
 
+type revinfo struct {
+	rev string
+	url string
+}
+
+func (info *revinfo) String() string {
+	return info.rev
+}
+
+func (info *revinfo) URL() string {
+	return info.url
+}
+
 // GetRevision returns revision string.
-func GetRevision(filename string) (string, error) {
-	pattern := regexp.MustCompilePOSIX(`https://code.google.com/p/go/source/browse/.*\?r=(.*)$`)
+func GetRevision(filename string) (revinfo, error) {
+	pattern := regexp.MustCompilePOSIX(`(https://code.google.com/p/go/source/browse/.*)\?.*r=(.*)$`)
 
 	f, err := os.Open(filename)
 	if err != nil {
@@ -46,18 +59,18 @@ func GetRevision(filename string) (string, error) {
 		line, isPrefix, err := reader.ReadLine()
 
 		if err == io.EOF {
-			return "", nil
+			return revinfo{}, nil
 		}
 		if err != nil {
-			return "", err
+			return revinfo{}, err
 		}
 		if isPrefix {
-			return "", nil
+			return revinfo{}, nil
 		}
 		result := pattern.FindSubmatch(line)
 
 		if result != nil {
-			return string(result[1]), nil
+			return revinfo{rev: string(result[2]), url: string(result[1])}, nil
 		}
 	}
 }

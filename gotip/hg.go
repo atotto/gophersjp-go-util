@@ -1,7 +1,6 @@
 package gotip
 
 import (
-	"log"
 	"os"
 	"os/exec"
 )
@@ -57,27 +56,4 @@ func (hg *Repos) updateTip() error {
 
 	_, err := cmd.CombinedOutput()
 	return err
-}
-
-// IsLatest returns true if file's revision is latest on go tip
-func (hg *Repos) IsLatest(filepath, revision string) (bool, error) {
-	b, err := hg.Diff(filepath, revision)
-	if err != nil {
-		return false, err
-	}
-
-	if len(b) != 0 {
-		return false, nil
-	}
-
-	return true, nil
-}
-
-func run(c *exec.Cmd) {
-	c.Stdout = os.Stdout
-	c.Stderr = os.Stderr
-	err := c.Run()
-	if err != nil {
-		log.Fatal(err)
-	}
 }
