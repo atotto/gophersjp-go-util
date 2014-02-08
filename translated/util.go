@@ -9,6 +9,7 @@ import (
 	"regexp"
 )
 
+// GetDocs return translate documents filepath
 func GetDocs(root string) ([]string, error) {
 	pattern := regexp.MustCompilePOSIX(`\.go|\.html`)
 
@@ -31,7 +32,37 @@ func GetDocs(root string) ([]string, error) {
 	return list, err
 }
 
+// GetRevision returns revision string.
 func GetRevision(filename string) (string, error) {
+	pattern := regexp.MustCompilePOSIX(`https://code.google.com/p/go/source/browse/.*\?r=(.*)$`)
+
+	f, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	reader := bufio.NewReader(f)
+	for {
+		line, isPrefix, err := reader.ReadLine()
+
+		if err == io.EOF {
+			return "", nil
+		}
+		if err != nil {
+			return "", err
+		}
+		if isPrefix {
+			return "", nil
+		}
+		result := pattern.FindSubmatch(line)
+
+		if result != nil {
+			return string(result[1]), nil
+		}
+	}
+}
+
+func GetURL(filename string) (string, error) {
 	pattern := regexp.MustCompilePOSIX(`https://code.google.com/p/go/source/browse/.*$`)
 
 	f, err := os.Open(filename)

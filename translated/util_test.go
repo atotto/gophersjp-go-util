@@ -29,5 +29,16 @@ func ExampleGetRevision() {
 	fmt.Println(out)
 
 	// Output:
+	// 3633a89bb56d9276a9fe55435b849f931bfa6393
+}
+
+func ExampleGetURL() {
+	out, err := GetURL("../fixture/doc/doc.go")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(out)
+
+	// Output:
 	// https://code.google.com/p/go/source/browse/misc/goplay/doc.go?r=3633a89bb56d9276a9fe55435b849f931bfa6393
 }
