@@ -35,6 +35,9 @@ func main() {
 	}
 
 	gotoolRepos, err := hg.AttachRepos(p.Dir)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	d := NewData()
 	for _, path := range list {
@@ -45,7 +48,7 @@ func main() {
 			log.Fatal("rev:" + err.Error())
 		}
 		var b []byte
-		if strings.HasPrefix(path, "src/pkg/code.google.com") {
+		if strings.HasPrefix(path, "src/pkg/code.google.com/p/go.tools") {
 			b, err = gotoolRepos.Diff(path, rev.String())
 		} else {
 			b, err = goRepos.Diff(path, rev.String())
