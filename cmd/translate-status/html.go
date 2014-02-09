@@ -48,14 +48,17 @@ const title = `<!--{
 
 const tmplHTML = `
   <style>
-      .status, .packages {
+      .status {
         margin-left: 20px;
         border-collapse: collapse;
       }
-      .status td, .status th, .packages td, .packages th {
+      .status td, .status th {
         vertical-align: top;
         padding: 2px 4px;
         font-size: 10pt;
+      }
+      .status th {
+        font-size: 12pt;
       }
       .status tr.item:nth-child(2n) {
         background-color: #f0f0f0;
@@ -94,15 +97,15 @@ const tmplHTML = `
     <colgroup class="col-translate"></colgroup>
     <tbody>
       <tr>
-        <th>item</th>
-        <th>translate revision</th>
+        <th><a href="https://github.com/gophersjp/go">translated item<a></th>
+        <th><a href="https://code.google.com/p/go/source/browse">tip</a></th>
       </tr>
       {{range $i, $f := .Files}}
       <tr class="item">
         <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.File}}">{{$f.File}}</a></td>
         <td>
           {{if $f.IsLatest}}
-            <a href="{{$f.NextUrl}}" class="latest">{{$f.Revision}}</a>
+            <a href="{{$f.NextUrl}}" class="latest">OK</a>
           {{else}}
             <span class="outdated">outdated</span>
             <a href="{{$f.NextUrl}}" class="outdated">(next)</a>
