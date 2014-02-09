@@ -47,10 +47,11 @@ func main() {
 		if err != nil {
 			log.Fatal("rev:" + err.Error())
 		}
+
 		var b []byte
 		if strings.HasPrefix(path, "src/pkg/code.google.com/p/go.tools/") {
-			path = strings.TrimPrefix(path, "src/pkg/code.google.com/p/go.tools/")
-			b, err = gotoolRepos.Diff(path, rev.String())
+			rpath := strings.TrimPrefix(path, "src/pkg/code.google.com/p/go.tools/")
+			b, err = gotoolRepos.Diff(rpath, rev.String())
 		} else {
 			b, err = goRepos.Diff(path, rev.String())
 		}
@@ -66,7 +67,8 @@ func main() {
 		d.Files = append(d.Files, &translatedFile{
 			File:       path,
 			CurrentUrl: rev.String(),
-			NextUrl:    rev.URL(),
+			NextUrl:    rev.RawURL(),
+			IsLatest:   revision == "LATEST",
 			Revision:   revision,
 		})
 	}

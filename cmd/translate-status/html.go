@@ -19,6 +19,7 @@ type translatedFile struct {
 	File       string
 	CurrentUrl string
 	NextUrl    string
+	IsLatest   bool
 	Revision   string
 }
 
@@ -118,7 +119,14 @@ const tmplHTML = `
         {{range $i, $f := .Files}}
         <tr class="item">
           <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.File}}">{{$f.File}}</a></td>
-          <td>{{$f.Revision}}</td>
+          <td>
+            {{if $f.IsLatest}}
+              <a href="{{$f.NextUrl}}" class="latest">{{$f.Revision}}</a>
+            {{else}}
+              <span class="outdated">outdated</span>
+              <a href="{{$f.NextUrl}}" class="outdated">(next)</a>
+            {{end}}
+          </td>
         </tr>
         {{end}}
       </tbody>

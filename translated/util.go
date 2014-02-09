@@ -2,8 +2,10 @@ package tr
 
 import (
 	"bufio"
+	"html"
 	"io"
 	"log"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -34,20 +36,29 @@ func GetDocs(root string) ([]string, error) {
 
 type revinfo struct {
 	rev string
-	url string
+	url *url.URL
 }
 
 func (info *revinfo) String() string {
 	return info.rev
 }
 
+func (info *revinfo) RawURL() string {
+	u := *info.url // copy
+	q := u.Query()
+	q.Del("r")
+	u.RawQuery = q.Encode()
+	return u.String()
+}
+
 func (info *revinfo) URL() string {
-	return info.url
+	u := info.url
+	return u.String()
 }
 
 // GetRevision returns revision string.
 func GetRevision(filename string) (revinfo, error) {
-	pattern := regexp.MustCompilePOSIX(`(https://code.google.com/p/go/source/browse/.*)\?.*r=(.*)$`)
+	pattern := regexp.MustCompilePOSIX(`https://code.google.com/p/go/source/browse/.*$`)
 
 	f, err := os.Open(filename)
 	if err != nil {
@@ -67,10 +78,19 @@ func GetRevision(filename string) (revinfo, error) {
 		if isPrefix {
 			return revinfo{}, nil
 		}
-		result := pattern.FindSubmatch(line)
+		result := pattern.Find(line)
 
 		if result != nil {
-			return revinfo{rev: string(result[2]), url: string(result[1])}, nil
+			uri := html.UnescapeString(string(result))
+			u, err := url.Parse(uri)
+			if err != nil {
+				log.Fatal(err)
+			}
+			q := u.Query()
+			q.Del("name")
+			u.RawQuery = q.Encode()
+
+			return revinfo{rev: q.Get("r"), url: u}, nil
 		}
 	}
 }
