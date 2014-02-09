@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"runtime"
 	"strings"
@@ -64,11 +65,12 @@ func main() {
 
 		fn := func(s *Status, tag string) {
 			var st hg.Status
+			var diff int
 			if strings.HasPrefix(path, "src/pkg/code.google.com/p/go.tools/") {
 				rpath := strings.TrimPrefix(path, "src/pkg/code.google.com/p/go.tools/")
-				st, _, err = gotoolRepos.Check(tag, rpath, rev.String())
+				st, diff, err = gotoolRepos.Check(tag, rpath, rev.String())
 			} else {
-				st, _, err = goRepos.Check(tag, path, rev.String())
+				st, diff, err = goRepos.Check(tag, path, rev.String())
 			}
 			switch st {
 			case hg.Same:
@@ -76,10 +78,10 @@ func main() {
 				s.Stage = "OK"
 			case hg.Ahead:
 				s.IsOutdated = false
-				s.Stage = "Ahead"
+				s.Stage = fmt.Sprintf("Ahead+%d", diff)
 			case hg.Outdated:
 				s.IsOutdated = true
-				s.Stage = "Outdated"
+				s.Stage = fmt.Sprintf("Outdated-%d", diff)
 			default:
 				s.IsOutdated = true
 				s.Stage = "error"

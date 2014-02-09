@@ -93,6 +93,10 @@ const tmplHTML = `
   </style>
   <h3><a href="https://code.google.com/p/go">Go</a>のドキュメント翻訳ステータス</h3>
   <p>
+    翻訳したものが最新のものかどうかをチェックします。
+    本サイトは github.com/gophersjp/go の成果物です。ご気軽にご参加ください。
+  </p>
+  <p>
   <a href="https://github.com/gophersjp/go" class="download" id="start" target="_blank">
   <span class="big">Repository</span>
   <span class="desc">github.com/gophersjp/go</span>
