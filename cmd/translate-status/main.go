@@ -78,10 +78,10 @@ func main() {
 				s.Stage = "OK"
 			case hg.Ahead:
 				s.IsOutdated = false
-				s.Stage = fmt.Sprintf("Ahead+%d", diff)
+				s.Stage = fmt.Sprintf("ahead+%d", diff)
 			case hg.Outdated:
 				s.IsOutdated = true
-				s.Stage = fmt.Sprintf("Outdated-%d", diff)
+				s.Stage = fmt.Sprintf("outdated-%d", diff)
 			default:
 				s.IsOutdated = true
 				s.Stage = "error"

@@ -91,10 +91,10 @@ const tmplHTML = `
         color: #C00;
       }
   </style>
-  <h3><a href="https://code.google.com/p/go">Go</a>のドキュメント翻訳ステータス</h3>
+  <h3><a href="https://code.google.com/p/go">Go</a>翻訳ステータス</h3>
   <p>
-    翻訳したものが最新のものかどうかをチェックします。
-    本サイトは github.com/gophersjp/go の成果物です。ご気軽にご参加ください。
+    翻訳したドキュメントが最新のものかどうかをチェックしています。
+    なお、本サイトは github.com/gophersjp/go の成果物です。ご気軽にご参加ください。
   </p>
   <p>
   <a href="https://github.com/gophersjp/go" class="download" id="start" target="_blank">
@@ -116,7 +116,7 @@ const tmplHTML = `
         <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.File}}">{{$f.File}}</a></td>
         <td>
           {{if $f.Stable.IsOutdated}}
-            <a href="{{$f.NextUrl}}" class="outdated">{{$f.Stable.Stage}}(next)</a>
+            <a href="{{$f.NextUrl}}" class="outdated">{{$f.Stable.Stage}}</a>
           {{else}}
             <a href="{{$f.NextUrl}}" class="latest">{{$f.Stable.Stage}}</a>
           {{end}}
