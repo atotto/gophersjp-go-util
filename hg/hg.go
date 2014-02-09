@@ -1,8 +1,10 @@
 package hg
 
 import (
+	"encoding/json"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type Repos struct {
@@ -27,6 +29,66 @@ func (hg *Repos) Diff(filepath, revision string) ([]byte, error) {
 	cmd.Dir = hg.repoRoot
 
 	return cmd.CombinedOutput()
+}
+
+type hglog struct {
+	No  int `json:"n"`
+	Rev string
+}
+
+type Status string
+
+const (
+	None     Status = "none"
+	Ahead           = "ahead"
+	Same            = "same"
+	Outdated        = "outdated"
+)
+
+//
+func (hg *Repos) Check(tag, filepath, revision string) (st Status, diff int, err error) {
+	st = None
+	diff = 0
+	err = nil
+
+	cmd := exec.Command("hg", "log", "-b", "default", "--template", `\{"n":{rev},"rev":"{node}"},`, "-r", tag+":"+revision, filepath)
+	cmd.Dir = hg.repoRoot
+
+	b, err := cmd.CombinedOutput()
+	if err != nil {
+		return
+	}
+
+	if len(b) == 0 {
+		return
+	}
+
+	json_string := "["
+	json_string = json_string + string(b[0:len(b)-1]) + "]"
+
+	var logs []hglog
+	json.Unmarshal([]byte(json_string), &logs)
+
+	if len(logs) != 1 {
+		for n, l := range logs {
+			if strings.Contains(l.Rev, revision) {
+				diff = n
+				break
+			}
+		}
+		if (logs[0].No - logs[1].No) < 0 {
+			// ahead
+			st = Ahead
+		} else {
+			// outdated
+			st = Outdated
+		}
+
+	} else {
+		st = Same
+	}
+
+	return
 }
 
 // UpdateRepo perform the hg pull;hg update tip.
