@@ -40,6 +40,7 @@ func main() {
 	}
 
 	d := NewData()
+	d.Tag = "go1.2"
 	for _, path := range list {
 		log.Printf("== %s\n", path)
 
@@ -47,30 +48,52 @@ func main() {
 		if err != nil {
 			log.Fatal("rev:" + err.Error())
 		}
-
-		var b []byte
-		if strings.HasPrefix(path, "src/pkg/code.google.com/p/go.tools/") {
-			rpath := strings.TrimPrefix(path, "src/pkg/code.google.com/p/go.tools/")
-			b, err = gotoolRepos.Diff(rpath, rev.String())
-		} else {
-			b, err = goRepos.Diff(path, rev.String())
-		}
-		var revision = "LATEST"
-		if len(b) != 0 {
-			revision = rev.String()
-		}
-		if err != nil {
-			log.Printf("error: %s, %s", err.Error(), string(b))
-			revision = string(b)
-		}
-
-		d.Files = append(d.Files, &translatedFile{
+		tf := translatedFile{
 			File:       path,
 			CurrentUrl: rev.String(),
 			NextUrl:    rev.RawURL(),
-			IsLatest:   revision == "LATEST",
-			Revision:   revision,
-		})
+			Stable: Status{
+				IsOutdated: false,
+				Stage:      "",
+			},
+			Tip: Status{
+				IsOutdated: false,
+				Stage:      "",
+			},
+		}
+
+		fn := func(s *Status, tag string) {
+			var st hg.Status
+			if strings.HasPrefix(path, "src/pkg/code.google.com/p/go.tools/") {
+				rpath := strings.TrimPrefix(path, "src/pkg/code.google.com/p/go.tools/")
+				st, _, err = gotoolRepos.Check(tag, rpath, rev.String())
+			} else {
+				st, _, err = goRepos.Check(tag, path, rev.String())
+			}
+			switch st {
+			case hg.Same:
+				s.IsOutdated = false
+				s.Stage = "OK"
+			case hg.Ahead:
+				s.IsOutdated = false
+				s.Stage = "Ahead"
+			case hg.Outdated:
+				s.IsOutdated = true
+				s.Stage = "Outdated"
+			default:
+				s.IsOutdated = true
+				s.Stage = "error"
+			}
+			if err != nil {
+				s.IsOutdated = false
+				log.Printf("error: %s", err.Error())
+				s.Stage = "none"
+			}
+		}
+		fn(&tf.Stable, d.Tag)
+		fn(&tf.Tip, "tip")
+
+		d.Files = append(d.Files, &tf)
 	}
 
 	// Output HTML
@@ -79,4 +102,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func check(tag, filepath, revision string) {
+
 }

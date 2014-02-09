@@ -2,6 +2,7 @@ package hg
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"os/exec"
 	"strings"
@@ -56,6 +57,7 @@ func (hg *Repos) Check(tag, filepath, revision string) (st Status, diff int, err
 
 	b, err := cmd.CombinedOutput()
 	if err != nil {
+		err = errors.New(err.Error() + ";" + string(b))
 		return
 	}
 

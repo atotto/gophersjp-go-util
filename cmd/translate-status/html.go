@@ -9,6 +9,7 @@ import (
 type Data struct {
 	Files      []*translatedFile
 	LastUpdate string
+	Tag        string
 }
 
 func NewData() *Data {
@@ -19,8 +20,13 @@ type translatedFile struct {
 	File       string
 	CurrentUrl string
 	NextUrl    string
-	IsLatest   bool
-	Revision   string
+	Tip        Status
+	Stable     Status
+}
+
+type Status struct {
+	IsOutdated bool
+	Stage      string
 }
 
 var htmlTemplate = template.Must(template.New("html").Parse(tmplHTML))
@@ -98,17 +104,24 @@ const tmplHTML = `
     <tbody>
       <tr>
         <th><a href="https://github.com/gophersjp/go">translated item<a></th>
+        <th><a href="https://code.google.com/p/go/source/browse">{{.Tag}}</a></th>
         <th><a href="https://code.google.com/p/go/source/browse">tip</a></th>
       </tr>
       {{range $i, $f := .Files}}
       <tr class="item">
         <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.File}}">{{$f.File}}</a></td>
         <td>
-          {{if $f.IsLatest}}
-            <a href="{{$f.NextUrl}}" class="latest">OK</a>
+          {{if $f.Stable.IsOutdated}}
+            <a href="{{$f.NextUrl}}" class="outdated">{{$f.Stable.Stage}}(next)</a>
           {{else}}
-            <span class="outdated">outdated</span>
-            <a href="{{$f.NextUrl}}" class="outdated">(next)</a>
+            <a href="{{$f.NextUrl}}" class="latest">{{$f.Stable.Stage}}</a>
+          {{end}}
+        </td>
+        <td>
+          {{if $f.Tip.IsOutdated}}
+            <a href="{{$f.NextUrl}}" class="latest">{{$f.Tip.Stage}}</a>
+          {{else}}
+            <a href="{{$f.NextUrl}}" class="latest">{{$f.Tip.Stage}}</a>
           {{end}}
         </td>
       </tr>
