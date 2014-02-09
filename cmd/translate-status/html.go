@@ -32,6 +32,8 @@ func htmlOutput(d *Data, outfile string) error {
 			return err
 		}
 		defer f.Close()
+
+		f.WriteString(title)
 		htmlTemplate.Execute(f, d)
 	} else {
 		htmlTemplate.Execute(os.Stdout, d)
@@ -40,31 +42,14 @@ func htmlOutput(d *Data, outfile string) error {
 	return nil
 }
 
+const title = `<!--{
+	"Title": "Translate Status"
+}-->`
+
 const tmplHTML = `
-<!DOCTYPE html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Gophersjp Translate Status</title>
   <style>
-      body {
-        font-family: sans-serif;
-        padding: 0; margin: 0;
-      }
-      h1, h2 {
-        margin: 0;
-        padding: 5px;
-      }
-      h1 {
-        background: #eee;
-      }
-      h2 {
-        margin-top: 20px;
-      }
-      #content {
-        margin: 10px;
-      }
       .status, .packages {
-        margin: 5px;
+        margin-left: 20px;
         border-collapse: collapse;
       }
       .status td, .status th, .packages td, .packages th {
@@ -93,49 +78,41 @@ const tmplHTML = `
       .outdated {
         color: #C00;
       }
-      #footer {
-        clear: both;
-        border-top: 1px solid #bbb;
-        font-size: 0.9em;
-        color: #aaa;
-        padding: 5px;
-        background: #fff;
+      .timestamp {
+        color: #C00;
       }
   </style>
-</head>  
-<body>
-  <h1>Translate Status</h1>
-  <div id="content">
-    <p><a href="https://code.google.com/p/go">Go</a>のドキュメント翻訳ステータス</p>
-    <p>Repository: <a href="https://github.com/gophersjp/go">github.com/gophersjp/go</a></p>
-    <table class="status">
-      <colgroup class="col-item"></colgroup>
-      <colgroup class="col-translate"></colgroup>
-      <tbody>
-        <tr>
-          <th>item</th>
-          <th>translate revision</th>
-        </tr>
-        {{range $i, $f := .Files}}
-        <tr class="item">
-          <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.File}}">{{$f.File}}</a></td>
-          <td>
-            {{if $f.IsLatest}}
-              <a href="{{$f.NextUrl}}" class="latest">{{$f.Revision}}</a>
-            {{else}}
-              <span class="outdated">outdated</span>
-              <a href="{{$f.NextUrl}}" class="outdated">(next)</a>
-            {{end}}
-          </td>
-        </tr>
-        {{end}}
-      </tbody>
-    </table>
-  </div>
+  <h3><a href="https://code.google.com/p/go">Go</a>のドキュメント翻訳ステータス</h3>
+  <p>
+  <a href="https://github.com/gophersjp/go" class="download" id="start" target="_blank">
+  <span class="big">Repository</span>
+  <span class="desc">github.com/gophersjp/go</span>
+  </a>
+  </p>
+  <table class="status">
+    <colgroup class="col-item"></colgroup>
+    <colgroup class="col-translate"></colgroup>
+    <tbody>
+      <tr>
+        <th>item</th>
+        <th>translate revision</th>
+      </tr>
+      {{range $i, $f := .Files}}
+      <tr class="item">
+        <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.File}}">{{$f.File}}</a></td>
+        <td>
+          {{if $f.IsLatest}}
+            <a href="{{$f.NextUrl}}" class="latest">{{$f.Revision}}</a>
+          {{else}}
+            <span class="outdated">outdated</span>
+            <a href="{{$f.NextUrl}}" class="outdated">(next)</a>
+          {{end}}
+        </td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
   <div id="footer">
     Last Update: {{.LastUpdate}}
   </div>
-</div>
-</body>
-</html>
 `
