@@ -13,7 +13,7 @@ import (
 
 var (
 	root   = flag.String("root", ".", "root dir")
-	output = flag.String("o", "update.html", "html file for output; default: stdout")
+	output = flag.String("o", "translate.html", "html file for output; default: stdout")
 )
 
 func main() {
