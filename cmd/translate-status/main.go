@@ -13,8 +13,9 @@ import (
 )
 
 var (
-	root   = flag.String("root", ".", "root dir")
-	output = flag.String("o", "translate.html", "html file for output; default: stdout")
+	root   = flag.String("docroot", ".", "gophersjp/go document root dir")
+	goroot = flag.String("goroot", runtime.GOROOT(), "Go root directory")
+	output = flag.String("o", "translate.html", "html file for output; default: ./translate.html")
 )
 
 func main() {
@@ -25,7 +26,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	goRepos, err := hg.AttachRepos(runtime.GOROOT())
+	goRepos, err := hg.AttachRepos(*goroot)
 	if err != nil {
 		log.Fatal(err)
 	}
