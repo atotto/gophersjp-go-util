@@ -1,6 +1,7 @@
 package hg
 
 import (
+	"fmt"
 	"runtime"
 	"testing"
 )
@@ -26,6 +27,15 @@ func TestAttachRepos(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
+}
+
+func TestVersion(t *testing.T) {
+	b, err := Version()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fmt.Printf("Mercurial version: %s\n", b)
 }
 
 func TestDiff(t *testing.T) {

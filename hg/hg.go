@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 )
 
@@ -22,6 +23,23 @@ func AttachRepos(repoRoot string) (*Repos, error) {
 		return nil, err
 	}
 	return &Repos{repoRoot: repoRoot}, nil
+}
+
+// Version returns hg version.
+func Version() (string, error) {
+	cmd := exec.Command("hg", "version")
+	b, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", err
+	}
+
+	p := regexp.MustCompilePOSIX(`Mercurial Distributed SCM \(version (.*)\)`)
+	res := p.FindSubmatch(b)
+	if res == nil || len(res) == 1 {
+		return "", errors.New("no match.")
+	}
+
+	return string(res[1]), nil
 }
 
 // Diff returns a diff if differ between specified file's revision and latest on go tip.
