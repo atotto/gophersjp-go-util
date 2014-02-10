@@ -83,7 +83,7 @@ func TestCheck(t *testing.T) {
 	for n, tt := range tests {
 		st, diff, err := hg.Check(tt.tag, tt.path, tt.rev)
 		if (err != nil) != tt.isErr {
-			t.Errorf("#%d got error%v", n, err)
+			t.Errorf("#%d got error=\"%v\"", n, err)
 		}
 		if st != tt.expectedStatus {
 			t.Errorf("#%d want status=%v, got %v", n, tt.expectedStatus, st)
