@@ -70,21 +70,23 @@ func TestCheck(t *testing.T) {
 		rev            string
 		expectedStatus Status
 		expectedDiff   int
+		isErr          bool
 	}{
-		{"go1.2", "src/cmd/5c/doc.go", "3633a89bb56d", Same, 0},
-		{"go1.2", "src/cmd/5c/doc.go", "2695fe638e0b", Outdated, 3},
-		{"go1.2", "src/cmd/5a/doc.go", "3633a89bb56d", Outdated, 1},
-		{"go1.2", "src/cmd/5a/doc.go", "b1edf8faa5d6", Same, 0},
-		{"go1", "src/cmd/5a/doc.go", "b1edf8faa5d6", Ahead, 2},
+		{"go1.2", "src/cmd/5c/doc.go", "3633a89bb56d", Same, 0, false},
+		{"go1.2", "src/cmd/5c/doc.go", "2695fe638e0b", Outdated, 3, false},
+		{"go1.2", "src/cmd/5a/doc.go", "3633a89bb56d", Outdated, 1, false},
+		{"go1.2", "src/cmd/5a/doc.go", "b1edf8faa5d6", Same, 0, false},
+		{"go1", "src/cmd/5a/doc.go", "b1edf8faa5d6", Ahead, 2, false},
+		{"go1.2", "src/cmd/5c/doc.go", "go1.2", None, 0, true},
 	}
 
 	for n, tt := range tests {
 		st, diff, err := hg.Check(tt.tag, tt.path, tt.rev)
-		if err != nil {
-			t.Fatal(err)
+		if (err != nil) != tt.isErr {
+			t.Errorf("#%d got error%v", n, err)
 		}
 		if st != tt.expectedStatus {
-			t.Errorf("#%d, want status=%v, got %v", n, tt.expectedStatus, st)
+			t.Errorf("#%d want status=%v, got %v", n, tt.expectedStatus, st)
 		}
 		if diff != tt.expectedDiff {
 			t.Errorf("#%d want diff=%v, got %v", n, tt.expectedDiff, diff)

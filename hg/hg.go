@@ -62,6 +62,7 @@ const (
 	Ahead           = "ahead"
 	Same            = "same"
 	Outdated        = "outdated"
+	Error           = "error"
 )
 
 //
@@ -75,11 +76,14 @@ func (hg *Repos) Check(tag, filepath, revision string) (st Status, diff int, err
 
 	b, err := cmd.CombinedOutput()
 	if err != nil {
+		st = Error
 		err = errors.New(err.Error() + ";" + string(b))
 		return
 	}
 
 	if len(b) == 0 {
+		st = None
+		err = errors.New("no log")
 		return
 	}
 
@@ -89,7 +93,13 @@ func (hg *Repos) Check(tag, filepath, revision string) (st Status, diff int, err
 	var logs []hglog
 	json.Unmarshal([]byte(json_string), &logs)
 
-	if len(logs) != 1 {
+	switch len(logs) {
+	case 0:
+		st = None
+		err = errors.New("no log: " + json_string)
+	case 1:
+		st = Same
+	default:
 		for n, l := range logs {
 			if strings.Contains(l.Rev, revision) {
 				diff = n
@@ -103,9 +113,6 @@ func (hg *Repos) Check(tag, filepath, revision string) (st Status, diff int, err
 			// outdated
 			st = Outdated
 		}
-
-	} else {
-		st = Same
 	}
 
 	return
