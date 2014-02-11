@@ -45,11 +45,12 @@ func main() {
 	d.Tag = "go1.2"
 	for _, path := range list {
 		log.Printf("== %s\n", path)
-
 		rev, err := tr.GetRevision(*root + "/" + path)
 		if err != nil {
-			log.Fatal("rev:" + err.Error())
+			log.Fatalf("error: %s\n", err.Error())
 		}
+		log.Printf("rev: %s\n", rev.String())
+
 		tf := translatedFile{
 			File:       path,
 			CurrentUrl: rev.String(),
