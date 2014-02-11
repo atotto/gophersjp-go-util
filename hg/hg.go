@@ -71,7 +71,12 @@ func (hg *Repos) Check(tag, filepath, revision string) (st Status, diff int, err
 	diff = 0
 	err = nil
 
-	cmd := exec.Command("hg", "log", "-b", "default", "--template", `\{"n":{rev},"rev":"{node}"},`, "-r", tag+":"+revision, filepath)
+	cmd := exec.Command("hg", "log",
+		"-b", "default",
+		"--template", `\{"n":{rev},"rev":"{node}"},`,
+		"-r", tag+":"+revision,
+		"-k", filepath, // -k http://d.hatena.ne.jp/flying-foozy/20100429/1272528071
+	)
 	cmd.Dir = hg.repoRoot
 
 	b, err := cmd.CombinedOutput()
