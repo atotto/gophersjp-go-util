@@ -74,9 +74,9 @@ func TestCheck(t *testing.T) {
 	}{
 		{"go1.2", "src/cmd/5c/doc.go", "3633a89bb56d", Same, 0, false},
 		{"go1.2", "src/cmd/5c/doc.go", "2695fe638e0b", Outdated, 3, false},
-		{"go1.2", "src/cmd/5a/doc.go", "3633a89bb56d", Outdated, 1, false},
+		{"go1.2", "src/cmd/5a/doc.go", "3633a89bb56d", Outdated, 2, false},
 		{"go1.2", "src/cmd/5a/doc.go", "b1edf8faa5d6", Same, 0, false},
-		{"go1", "src/cmd/5a/doc.go", "b1edf8faa5d6", Ahead, 2, false},
+		{"go1", "src/cmd/5a/doc.go", "b1edf8faa5d6", Ahead, 3, false},
 		{"go1.2", "src/cmd/5c/doc.go", "go1.2", None, 0, true},
 	}
 
