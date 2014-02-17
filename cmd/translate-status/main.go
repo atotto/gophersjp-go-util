@@ -70,9 +70,11 @@ func main() {
 			var diff int
 			if strings.HasPrefix(path, "src/pkg/code.google.com/p/go.tools/") {
 				rpath := strings.TrimPrefix(path, "src/pkg/code.google.com/p/go.tools/")
+				tf.KeyName = rpath
 				st, diff, err = gotoolRepos.Check(tag, rpath, rev.String())
 			} else {
 				st, diff, err = goRepos.Check(tag, path, rev.String())
+				tf.KeyName = path
 			}
 			switch st {
 			case hg.Same:

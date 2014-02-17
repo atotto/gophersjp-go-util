@@ -18,6 +18,7 @@ func NewData() *Data {
 
 type translatedFile struct {
 	File       string
+	KeyName    string
 	CurrentUrl string
 	NextUrl    string
 	Tip        Status
@@ -80,6 +81,9 @@ const tmplHTML = `
       .col-item {
         border-right: solid 1px #ccc;
       }
+      .col-translate {
+        border-right: solid 1px #ccc;
+      }
       .status .latest {
         color: #000;
         font-size: 83%;
@@ -89,6 +93,16 @@ const tmplHTML = `
       }
       .timestamp {
         color: #C00;
+      }
+      a.buttons {
+        padding: 0px 5px;
+        color: #222;
+        border: 1px solid #375EAB;
+        background: #E0EBF5;
+
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
       }
   </style>
   <h3><a href="https://code.google.com/p/go">Go</a>翻訳ステータス</h3>
@@ -104,12 +118,14 @@ const tmplHTML = `
   </p>
   <table class="status">
     <colgroup class="col-item"></colgroup>
-    <colgroup class="col-translate"></colgroup>
+    <colgroup class="col-translate" span="2"></colgroup>
+    <colgroup class="col-issues"></colgroup>
     <tbody>
       <tr>
         <th><a href="https://github.com/gophersjp/go">translated item<a></th>
         <th><a href="https://code.google.com/p/go/source/browse">{{.Tag}}</a></th>
         <th><a href="https://code.google.com/p/go/source/browse">tip</a></th>
+        <th colspan="2"><a href="https://github.com/gophersjp/go/issues?state=open">issues</a></th>
       </tr>
       {{range $i, $f := .Files}}
       <tr class="item">
@@ -127,6 +143,13 @@ const tmplHTML = `
           {{else}}
             <a href="{{$f.NextUrl}}" class="latest">{{$f.Tip.Stage}}</a>
           {{end}}
+        </td>
+        <td>
+          <a href="https://github.com/gophersjp/go/search?type=Issues&q={{$f.KeyName}}" target="_blank">issues</a>
+        </td>
+        <td>
+          <a href="https://github.com/gophersjp/go/issues/new?labels=translation&title=%2e%2f{{$f.KeyName}}&body=link%3a%20{{$f.NextUrl}}" target="_blank">add issue</a>
+          </div>
         </td>
       </tr>
       {{end}}
