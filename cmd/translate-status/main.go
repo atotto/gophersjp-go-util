@@ -7,9 +7,9 @@ import (
 	"runtime"
 	"strings"
 
-	"go/build"
 	"github.com/atotto/gophersjp-go-util/hg"
 	"github.com/atotto/gophersjp-go-util/translated"
+	"go/build"
 )
 
 var (
@@ -54,7 +54,7 @@ func main() {
 		tf := translatedFile{
 			File:       path,
 			CurrentUrl: rev.String(),
-			NextUrl:    rev.RawURL(),
+			RepoURL:    rev.RawURL(),
 			Stable: Status{
 				IsOutdated: false,
 				Stage:      "",

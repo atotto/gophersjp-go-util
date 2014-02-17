@@ -20,7 +20,7 @@ type translatedFile struct {
 	File       string
 	KeyName    string
 	CurrentUrl string
-	NextUrl    string
+	RepoURL    string
 	Tip        Status
 	Stable     Status
 }
@@ -132,23 +132,23 @@ const tmplHTML = `
         <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.File}}">{{$f.File}}</a></td>
         <td>
           {{if $f.Stable.IsOutdated}}
-            <a href="{{$f.NextUrl}}" class="outdated">{{$f.Stable.Stage}}</a>
+            <a href="{{$f.RepoURL}}" class="outdated">{{$f.Stable.Stage}}</a>
           {{else}}
-            <a href="{{$f.NextUrl}}" class="latest">{{$f.Stable.Stage}}</a>
+            <a href="{{$f.RepoURL}}" class="latest">{{$f.Stable.Stage}}</a>
           {{end}}
         </td>
         <td>
           {{if $f.Tip.IsOutdated}}
-            <a href="{{$f.NextUrl}}" class="latest">{{$f.Tip.Stage}}</a>
+            <a href="{{$f.RepoURL}}" class="latest">{{$f.Tip.Stage}}</a>
           {{else}}
-            <a href="{{$f.NextUrl}}" class="latest">{{$f.Tip.Stage}}</a>
+            <a href="{{$f.RepoURL}}" class="latest">{{$f.Tip.Stage}}</a>
           {{end}}
         </td>
         <td>
           <a href="https://github.com/gophersjp/go/search?type=Issues&q={{$f.KeyName}}" target="_blank">issues</a>
         </td>
         <td>
-          <a href="https://github.com/gophersjp/go/issues/new?labels=translation&title=%2e%2f{{$f.KeyName}}&body=link%3a%20{{$f.NextUrl}}" target="_blank">add issue</a>
+          <a href="https://github.com/gophersjp/go/issues/new?labels=translation&title=%2e%2f{{$f.KeyName}}&body=link%3a%20{{$f.RepoURL}}" target="_blank">add issue</a>
           </div>
         </td>
       </tr>
