@@ -1,4 +1,4 @@
-package tr
+package docs
 
 import (
 	"bufio"

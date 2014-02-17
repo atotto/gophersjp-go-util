@@ -7,9 +7,9 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/atotto/gophersjp-go-util/hg"
-	"github.com/atotto/gophersjp-go-util/translated"
 	"go/build"
+	"github.com/atotto/gophersjp-go-util/docs"
+	"github.com/atotto/gophersjp-go-util/hg"
 )
 
 var (
@@ -21,7 +21,7 @@ var (
 func main() {
 	flag.Parse()
 
-	list, err := tr.GetDocs(*root)
+	list, err := docs.GetDocs(*root)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func main() {
 	d.Tag = "go1.2"
 	for _, path := range list {
 		log.Printf("== %s\n", path)
-		rev, err := tr.GetRevision(*root + "/" + path)
+		rev, err := docs.GetRevision(*root + "/" + path)
 		if err != nil {
 			log.Fatalf("error: %s\n", err.Error())
 		}
