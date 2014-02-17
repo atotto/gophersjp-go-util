@@ -41,7 +41,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	d := NewData()
+	d := NewDataSet()
 	d.Tag = "go1.2"
 	for _, path := range list {
 		log.Printf("== %s\n", path)
@@ -51,10 +51,10 @@ func main() {
 		}
 		log.Printf("rev: %s\n", rev.String())
 
-		tf := translatedFile{
-			File:       path,
-			CurrentUrl: rev.String(),
-			RepoURL:    rev.RawURL(),
+		tf := Item{
+			FilePath: path,
+			Rev:      rev.String(),
+			RepoURL:  rev.RawURL(),
 			Stable: Status{
 				IsOutdated: false,
 				Stage:      "",
@@ -99,7 +99,7 @@ func main() {
 		fn(&tf.Stable, d.Tag)
 		fn(&tf.Tip, "tip")
 
-		d.Files = append(d.Files, &tf)
+		d.Items = append(d.Items, &tf)
 	}
 
 	// Output HTML

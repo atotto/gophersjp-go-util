@@ -6,23 +6,23 @@ import (
 	"time"
 )
 
-type Data struct {
-	Files      []*translatedFile
+type DataSet struct {
+	Items      []*Item
 	LastUpdate string
 	Tag        string
 }
 
-func NewData() *Data {
-	return &Data{LastUpdate: time.Now().Format(time.RFC3339)}
+func NewDataSet() *DataSet {
+	return &DataSet{LastUpdate: time.Now().Format(time.RFC3339)}
 }
 
-type translatedFile struct {
-	File       string
-	KeyName    string
-	CurrentUrl string
-	RepoURL    string
-	Tip        Status
-	Stable     Status
+type Item struct {
+	FilePath string
+	KeyName  string
+	Rev      string
+	RepoURL  string
+	Tip      Status
+	Stable   Status
 }
 
 type Status struct {
@@ -32,7 +32,7 @@ type Status struct {
 
 var htmlTemplate = template.Must(template.New("html").Parse(tmplHTML))
 
-func htmlOutput(d *Data, outfile string) error {
+func htmlOutput(d *DataSet, outfile string) error {
 	if outfile != "" {
 		f, err := os.Create(outfile)
 		if err != nil {
@@ -127,9 +127,9 @@ const tmplHTML = `
         <th><a href="https://code.google.com/p/go/source/browse">tip</a></th>
         <th colspan="2"><a href="https://github.com/gophersjp/go/issues?state=open">issues</a></th>
       </tr>
-      {{range $i, $f := .Files}}
+      {{range $i, $f := .Items}}
       <tr class="item">
-        <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.File}}">{{$f.File}}</a></td>
+        <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.FilePath}}">{{$f.FilePath}}</a></td>
         <td>
           {{if $f.Stable.IsOutdated}}
             <a href="{{$f.RepoURL}}" class="outdated">{{$f.Stable.Stage}}</a>
