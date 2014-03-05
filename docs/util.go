@@ -11,9 +11,32 @@ import (
 	"regexp"
 )
 
-// GetDocs return translate documents filepath
+// GetDocs return translated documents from filepath
 func GetDocs(root string) ([]string, error) {
-	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/(.*)(\.go|\.html)`)
+	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/(.*)(\.go|\.html)$`)
+
+	list := []string{}
+
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if info == nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+		result := pattern.FindStringSubmatch(path)
+		if result != nil {
+			list = append(list, result[1]+result[2])
+		}
+		return nil
+	})
+
+	return list, err
+}
+
+// GetTranslationTargetDocs return target of translation documents from filepath
+func GetTranslationTargetDocs(root string) ([]string, error) {
+	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/(.*)(doc.go|\.html)$`)
 
 	list := []string{}
 

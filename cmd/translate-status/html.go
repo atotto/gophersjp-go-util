@@ -7,9 +7,10 @@ import (
 )
 
 type DataSet struct {
-	Items      []*Item
-	LastUpdate string
-	Tag        string
+	Items              []*Item
+	NonTranslatedItems []*NonTranslatedItem
+	LastUpdate         string
+	Tag                string
 }
 
 func NewDataSet() *DataSet {
@@ -28,6 +29,12 @@ type Item struct {
 type Status struct {
 	IsOutdated bool
 	Stage      string
+}
+
+type NonTranslatedItem struct {
+	FilePath string
+	KeyName  string
+	RepoURL  string
 }
 
 var htmlTemplate = template.Must(template.New("html").Parse(tmplHTML))
@@ -109,6 +116,7 @@ const tmplHTML = `
   <p>
     翻訳したドキュメントが最新のものかどうかをチェックしています。
     なお、本サイトは github.com/gophersjp/go の成果物です。ご気軽にご参加ください。
+    翻訳活動に参加していただける方は、<a href="https://github.com/gophersjp/go/wiki/%E7%BF%BB%E8%A8%B3%E5%8D%94%E5%8A%9B%E3%83%95%E3%83%AD%E3%83%BC">翻訳協力フロー</a>を一読の後、<a href="#non_translated">未翻訳リスト</a>からissueを登録ください。
   </p>
   <p>
   <a href="https://github.com/gophersjp/go" class="download" id="start" target="_blank">
@@ -149,12 +157,32 @@ const tmplHTML = `
         </td>
         <td>
           <a href="https://github.com/gophersjp/go/issues/new?labels=translation&title=%2e%2f{{$f.KeyName}}&body=link%3a%20{{$f.RepoURL}}" target="_blank">add issue</a>
-          </div>
         </td>
       </tr>
       {{end}}
     </tbody>
   </table>
+  <h4 id="non_translated">未翻訳リスト</h4>
+  <table class="status">
+    <colgroup class="col-item"></colgroup>
+    <colgroup class="col-translate" span="2"></colgroup>
+    <colgroup class="col-issues"></colgroup>
+    <tbody>
+      <tr>
+        <th><a href="https://github.com/gophersjp/go">non-translated item<a></th>
+        <th>add issue</a></th>
+      </tr>
+      {{range $i, $f := .NonTranslatedItems}}
+      <tr class="item">
+        <td><a href="{{$f.RepoURL}}">{{$f.FilePath}}</a></td>
+        <td>
+          <a href="https://github.com/gophersjp/go/issues/new?labels=translation&title=%2e%2f{{$f.KeyName}}&body=link%3a%20{{$f.RepoURL}}" target="_blank">翻訳します！</a>
+        </td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+
   <div id="footer">
     Last Update: {{.LastUpdate}}
   </div>

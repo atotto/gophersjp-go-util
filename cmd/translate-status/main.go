@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log"
 	"runtime"
+	"sort"
 	"strings"
 
 	"go/build"
+
 	"github.com/atotto/gophersjp-go-util/docs"
 	"github.com/atotto/gophersjp-go-util/hg"
 )
@@ -31,6 +33,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	doclist, err := docs.GetTranslationTargetDocs(*goroot)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	p, err := build.Import("code.google.com/p/go.tools", build.Default.GOROOT, build.FindOnly)
 	if err != nil {
 		log.Fatal(err)
@@ -39,6 +46,29 @@ func main() {
 	gotoolRepos, err := hg.AttachRepos(p.Dir)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	gotoolsDocList, err := docs.GetTranslationTargetDocs(p.Dir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	num := len(doclist) + len(gotoolsDocList)
+	allDocs := make(map[string]*NonTranslatedItem, num)
+	for _, path := range doclist {
+		allDocs[path] = &NonTranslatedItem{
+			FilePath: path,
+			KeyName:  path,
+			RepoURL:  "https://code.google.com/p/go/source/browse/" + path,
+		}
+	}
+	for _, path := range gotoolsDocList {
+		fpath := "src/pkg/code.google.com/p/go.tools/" + path
+		allDocs[fpath] = &NonTranslatedItem{
+			FilePath: fpath,
+			KeyName:  path,
+			RepoURL:  "https://code.google.com/p/go/source/browse/" + path + "?repo=tools",
+		}
 	}
 
 	d := NewDataSet()
@@ -50,6 +80,7 @@ func main() {
 			log.Fatalf("error: %s\n", err.Error())
 		}
 		log.Printf("rev: %s\n", rev.String())
+		delete(allDocs, path)
 
 		tf := Item{
 			FilePath: path,
@@ -102,6 +133,16 @@ func main() {
 		d.Items = append(d.Items, &tf)
 	}
 
+	// Save non-translated items
+	var keys []string
+	for key := range allDocs {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		d.NonTranslatedItems = append(d.NonTranslatedItems, allDocs[key])
+	}
+
 	// Output HTML
 	err = htmlOutput(d, *output)
 	log.Printf("Output: %s\n", *output)
@@ -112,4 +153,8 @@ func main() {
 
 func check(tag, filepath, revision string) {
 
+}
+
+func createNonTranslatedDocList() map[string]bool {
+	return nil
 }

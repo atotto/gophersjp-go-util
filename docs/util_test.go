@@ -22,6 +22,21 @@ func ExampleGetDocs() {
 	// html/updated.html
 }
 
+func ExampleGetTranslationTargetDocs() {
+	list, err := GetTranslationTargetDocs("../_fixture")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, path := range list {
+		fmt.Println(filepath.ToSlash(path))
+	}
+
+	// Output:
+	// doc/doc.go
+	// html/needupdate.html
+	// html/updated.html
+}
+
 func ExampleGetRevision() {
 	out, err := GetRevision("../_fixture/doc/doc.go")
 	if err != nil {
