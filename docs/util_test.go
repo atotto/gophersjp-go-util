@@ -18,6 +18,7 @@ func ExampleGetDocs() {
 	// Output:
 	// doc/doc.go
 	// doc/doc2.go
+	// doc/godoc.go
 	// html/needupdate.html
 	// html/updated.html
 }

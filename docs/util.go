@@ -9,11 +9,13 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 // GetDocs return translated documents from filepath
 func GetDocs(root string) ([]string, error) {
 	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/(.*)(\.go|\.html)$`)
+	exclude := []string{"/static/"}
 
 	list := []string{}
 
@@ -26,7 +28,13 @@ func GetDocs(root string) ([]string, error) {
 		}
 		result := pattern.FindStringSubmatch(path)
 		if result != nil {
-			list = append(list, result[1]+result[2])
+			doc := result[1] + result[2]
+			for _, ex := range exclude {
+				if strings.Contains(doc, ex) {
+					return nil
+				}
+			}
+			list = append(list, doc)
 		}
 		return nil
 	})
@@ -36,7 +44,8 @@ func GetDocs(root string) ([]string, error) {
 
 // GetTranslationTargetDocs return target of translation documents from filepath
 func GetTranslationTargetDocs(root string) ([]string, error) {
-	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/(.*)(doc.go|\.html)$`)
+	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/(.*)(/doc\.go|\.html)$`)
+	exclude := []string{"/static/", "/chrome/", "/testdata/"}
 
 	list := []string{}
 
@@ -49,7 +58,13 @@ func GetTranslationTargetDocs(root string) ([]string, error) {
 		}
 		result := pattern.FindStringSubmatch(path)
 		if result != nil {
-			list = append(list, result[1]+result[2])
+			doc := result[1] + result[2]
+			for _, ex := range exclude {
+				if strings.Contains(doc, ex) {
+					return nil
+				}
+			}
+			list = append(list, doc)
 		}
 		return nil
 	})
