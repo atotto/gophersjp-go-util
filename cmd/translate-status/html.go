@@ -170,11 +170,14 @@ const tmplHTML = `
     <tbody>
       <tr>
         <th><a href="https://github.com/gophersjp/go">non-translated item<a></th>
-        <th>add issue</a></th>
+        <th colspan="2">翻訳用チケット</a></th>
       </tr>
       {{range $i, $f := .NonTranslatedItems}}
       <tr class="item">
         <td><a href="{{$f.RepoURL}}">{{$f.FilePath}}</a></td>
+        <td>
+          <a href="https://github.com/gophersjp/go/search?type=Issues&q={{$f.KeyName}}" target="_blank">検索</a>
+        </td>
         <td>
           <a href="https://github.com/gophersjp/go/issues/new?labels=translation&title=%2e%2f{{$f.KeyName}}&body=link%3a%20{{$f.RepoURL}}" target="_blank">翻訳します！</a>
         </td>
