@@ -14,7 +14,7 @@ import (
 
 // GetDocs return translated documents from filepath
 func GetDocs(root string) ([]string, error) {
-	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/(.*)(\.go|\.html)$`)
+	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/([^_]*)(\.go|\.html)$`)
 	exclude := []string{"/static/"}
 
 	list := []string{}
@@ -44,7 +44,7 @@ func GetDocs(root string) ([]string, error) {
 
 // GetTranslationTargetDocs return target of translation documents from filepath
 func GetTranslationTargetDocs(root string) ([]string, error) {
-	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/(.*)(/doc\.go|\.html)$`)
+	pattern := regexp.MustCompilePOSIX(regexp.QuoteMeta(root) + `/([^_]*)(/doc\.go|\.html)$`)
 	exclude := []string{"/static/", "/chrome/", "/testdata/"}
 
 	list := []string{}
