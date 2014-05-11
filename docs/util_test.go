@@ -19,6 +19,7 @@ func ExampleGetDocs() {
 	// doc/doc.go
 	// doc/doc2.go
 	// doc/godoc.go
+	// html/hoge_hoge.html
 	// html/needupdate.html
 	// html/updated.html
 }
@@ -34,6 +35,7 @@ func ExampleGetTranslationTargetDocs() {
 
 	// Output:
 	// doc/doc.go
+	// html/hoge_hoge.html
 	// html/needupdate.html
 	// html/updated.html
 }
