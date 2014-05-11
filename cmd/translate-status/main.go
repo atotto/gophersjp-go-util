@@ -103,9 +103,11 @@ func main() {
 				rpath := strings.TrimPrefix(path, "src/pkg/code.google.com/p/go.tools/")
 				tf.KeyName = rpath
 				st, diff, err = gotoolRepos.Check(tag, rpath, rev.String())
+				tf.Repo = "tools"
 			} else {
 				st, diff, err = goRepos.Check(tag, path, rev.String())
 				tf.KeyName = path
+				tf.Repo = "default"
 			}
 			switch st {
 			case hg.Same:

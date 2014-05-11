@@ -22,6 +22,7 @@ type Item struct {
 	KeyName  string
 	Rev      string
 	RepoURL  string
+	Repo     string
 	Tip      Status
 	Stable   Status
 }
@@ -148,6 +149,7 @@ const tmplHTML = `
         <td>
           {{if $f.Tip.IsOutdated}}
             <a href="{{$f.RepoURL}}" class="latest" target="_blank">{{$f.Tip.Stage}}</a>
+            <a href="https://code.google.com/p/go/source/diff?r=tip&path=/{{$f.KeyName}}&old={{$f.Rev}}&repo={{$f.Repo}}">diff</a>
           {{else}}
             <a href="{{$f.RepoURL}}" class="latest" target="_blank">{{$f.Tip.Stage}}</a>
           {{end}}
