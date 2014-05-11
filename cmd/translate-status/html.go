@@ -149,7 +149,7 @@ const tmplHTML = `
         <td>
           {{if $f.Tip.IsOutdated}}
             <a href="{{$f.RepoURL}}" class="latest" target="_blank">{{$f.Tip.Stage}}</a>
-            <a href="https://code.google.com/p/go/source/diff?r=tip&path=/{{$f.KeyName}}&old={{$f.Rev}}&repo={{$f.Repo}}">diff</a>
+            <a href="https://code.google.com/p/go/source/diff?r=tip&path=/{{$f.KeyName}}&old={{$f.Rev}}&repo={{$f.Repo}}" target="_blank">diff</a>
           {{else}}
             <a href="{{$f.RepoURL}}" class="latest" target="_blank">{{$f.Tip.Stage}}</a>
           {{end}}
