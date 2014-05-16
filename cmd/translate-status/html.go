@@ -141,14 +141,14 @@ const tmplHTML = `
         <td><a href="https://github.com/gophersjp/go/blob/master/{{$f.FilePath}}">{{$f.FilePath}}</a></td>
         <td>
           {{if $f.Stable.IsOutdated}}
-            <a href="{{$f.RepoURL}}" class="outdated" target="_blank">{{$f.Stable.Stage}}</a>
+            <a href="{{$f.RepoURL}}?r={{$f.Rev}}" class="outdated" target="_blank">{{$f.Stable.Stage}}</a>
           {{else}}
             <a href="{{$f.RepoURL}}" class="latest" target="_blank">{{$f.Stable.Stage}}</a>
           {{end}}
         </td>
         <td>
           {{if $f.Tip.IsOutdated}}
-            <a href="{{$f.RepoURL}}" class="latest" target="_blank">{{$f.Tip.Stage}}</a>
+            <a href="{{$f.RepoURL}}?r={{$f.Rev}}" class="latest" target="_blank">{{$f.Tip.Stage}}</a>
             <a href="https://code.google.com/p/go/source/diff?r=tip&path=/{{$f.KeyName}}&old={{$f.Rev}}&repo={{$f.Repo}}" target="_blank">diff</a>
           {{else}}
             <a href="{{$f.RepoURL}}" class="latest" target="_blank">{{$f.Tip.Stage}}</a>
