@@ -72,7 +72,7 @@ func main() {
 	}
 
 	d := NewDataSet()
-	d.Tag = "go1.2"
+	d.Tag = "go1.3"
 	for _, path := range list {
 		log.Printf("== %s\n", path)
 		rev, err := docs.GetRevision(*root + "/" + path)
