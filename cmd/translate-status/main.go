@@ -63,7 +63,7 @@ func main() {
 		}
 	}
 	for _, path := range gotoolsDocList {
-		fpath := "src/pkg/code.google.com/p/go.tools/" + path
+		fpath := "src/code.google.com/p/go.tools/" + path
 		allDocs[fpath] = &NonTranslatedItem{
 			FilePath: fpath,
 			KeyName:  path,
@@ -99,8 +99,8 @@ func main() {
 		fn := func(s *Status, tag string) {
 			var st hg.Status
 			var diff int
-			if strings.HasPrefix(path, "src/pkg/code.google.com/p/go.tools/") {
-				rpath := strings.TrimPrefix(path, "src/pkg/code.google.com/p/go.tools/")
+			if strings.HasPrefix(path, "src/code.google.com/p/go.tools/") {
+				rpath := strings.TrimPrefix(path, "src/code.google.com/p/go.tools/")
 				tf.KeyName = rpath
 				st, diff, err = gotoolRepos.Check(tag, rpath, rev.String())
 				tf.Repo = "tools"
